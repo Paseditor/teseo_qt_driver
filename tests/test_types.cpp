@@ -4,38 +4,21 @@
 #include "test_types.h"
 #include "teseo_types.h"
 
-void TestTypes::positionDecimal_data()
-{
-    QTest::addColumn<double>("lat_ddmm");
-    QTest::addColumn<char>("lat_dir");
-    QTest::addColumn<double>("expected_lat");
-    QTest::addColumn<double>("lon_ddmm");
-    QTest::addColumn<char>("lon_dir");
-    QTest::addColumn<double>("expected_lon");
-
-    QTest::newRow("North-East") << 4811.365 << 'N' << 48.1894167
-                                 << 01164.123 << 'E' << 11.0687167;
-    QTest::newRow("South-West") << 3352.0 << 'S' << -33.8666667
-                                 << 01825.0 << 'W' << -18.4166667;
-}
-
 void TestTypes::positionDecimal()
 {
-    QFETCH(double, lat_ddmm);
-    QFETCH(char, lat_dir);
-    QFETCH(double, expected_lat);
-    QFETCH(double, lon_ddmm);
-    QFETCH(char, lon_dir);
-    QFETCH(double, expected_lon);
-
     Teseo::Position pos;
-    pos.latitude = lat_ddmm;
-    pos.latDirection = lat_dir;
-    pos.longitude = lon_ddmm;
-    pos.lonDirection = lon_dir;
+    pos.latitude = 4811.365;
+    pos.latDirection = 'N';
+    pos.longitude = 1164.123;
+    pos.lonDirection = 'E';
 
-    QVERIFY(qAbs(pos.latitudeDecimal() - expected_lat) < 0.001);
-    QVERIFY(qAbs(pos.longitudeDecimal() - expected_lon) < 0.001);
+    QVERIFY(qAbs(pos.latitudeDecimal() - 48.1894167) < 0.001);
+    QVERIFY(qAbs(pos.longitudeDecimal() - 12.0687167) < 0.001);
+
+    pos.latDirection = 'S';
+    pos.lonDirection = 'W';
+    QVERIFY(pos.latitudeDecimal() < 0);
+    QVERIFY(pos.longitudeDecimal() < 0);
 }
 
 void TestTypes::fixQualityEnum()

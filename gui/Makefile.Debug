@@ -1196,6 +1196,8 @@ debug/moc_deadreckoningpage.cpp: deadreckoningpage.h \
 		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtGui/qicon.h \
 		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtWidgets/QCheckBox \
 		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtWidgets/qcheckbox.h \
+		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtWidgets/QLabel \
+		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtWidgets/qlabel.h \
 		../src/teseo_driver.h \
 		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtCore/QObject \
 		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtCore/QTimer \
@@ -1467,9 +1469,11 @@ debug/moc_splashscreen.cpp: splashscreen.h \
 		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtGui/qtextoption.h \
 		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtGui/qpen.h \
 		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtGui/QLinearGradient \
-		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtCore/QTimer \
-		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtCore/qtimer.h \
-		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtCore/qbasictimer.h \
+		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtGui/QRadialGradient \
+		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtCore/QThread \
+		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtCore/qthread.h \
+		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtCore/qdeadlinetimer.h \
+		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtCore/qelapsedtimer.h \
 		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtWidgets/QApplication \
 		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtWidgets/qapplication.h \
 		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtCore/qcoreapplication.h \
@@ -1477,6 +1481,8 @@ debug/moc_splashscreen.cpp: splashscreen.h \
 		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtWidgets/qdesktopwidget.h \
 		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtGui/qguiapplication.h \
 		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtGui/qinputmethod.h \
+		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtGui/QFont \
+		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtGui/QPen \
 		debug/moc_predefs.h \
 		C:/Qt/QT5.15/5.15.2/mingw81_64/bin/moc.exe
 	C:\Qt\QT5.15\5.15.2\mingw81_64\bin\moc.exe $(DEFINES) --include C:/Users/CIR/Documents/teseo_qt_driver/gui/debug/moc_predefs.h -IC:/Qt/QT5.15/5.15.2/mingw81_64/mkspecs/win32-g++ -IC:/Users/CIR/Documents/teseo_qt_driver/gui -IC:/Users/CIR/Documents/teseo_qt_driver/src -IC:/Qt/QT5.15/5.15.2/mingw81_64/include -IC:/Qt/QT5.15/5.15.2/mingw81_64/include/QtWidgets -IC:/Qt/QT5.15/5.15.2/mingw81_64/include/QtGui -IC:/Qt/QT5.15/5.15.2/mingw81_64/include/QtANGLE -IC:/Qt/QT5.15/5.15.2/mingw81_64/include/QtSerialPort -IC:/Qt/QT5.15/5.15.2/mingw81_64/include/QtCore -IC:/Qt/QT5.15/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++ -IC:/Qt/QT5.15/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/x86_64-w64-mingw32 -IC:/Qt/QT5.15/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/backward -IC:/Qt/QT5.15/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include -IC:/Qt/QT5.15/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include-fixed -IC:/Qt/QT5.15/Tools/mingw1120_64/x86_64-w64-mingw32/include splashscreen.h -o debug\moc_splashscreen.cpp
@@ -1644,6 +1650,13 @@ debug/main.o: main.cpp C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtWidgets/QApplica
 		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtGui/qtextoption.h \
 		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtGui/qpen.h \
 		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtGui/QLinearGradient \
+		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtGui/QRadialGradient \
+		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtCore/QThread \
+		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtCore/qthread.h \
+		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtCore/qdeadlinetimer.h \
+		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtCore/qelapsedtimer.h \
+		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtGui/QFont \
+		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtGui/QPen \
 		style.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\main.o main.cpp
 
@@ -1989,7 +2002,9 @@ debug/connectionpage.o: connectionpage.cpp connectionpage.h \
 		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtWidgets/QLayout \
 		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtSerialPort/QSerialPortInfo \
 		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtSerialPort/qserialportinfo.h \
-		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtWidgets/QSpacerItem
+		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtWidgets/QSpacerItem \
+		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtWidgets/QGraphicsDropShadowEffect \
+		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtWidgets/qgraphicseffect.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\connectionpage.o connectionpage.cpp
 
 debug/infopage.o: infopage.cpp infopage.h \
@@ -2309,7 +2324,9 @@ debug/commandpage.o: commandpage.cpp commandpage.h \
 		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtCore/QByteArray \
 		../src/nmea_parser.h \
 		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtCore/QHash \
-		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtWidgets/QGridLayout
+		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtWidgets/QGridLayout \
+		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtWidgets/QLabel \
+		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtWidgets/qlabel.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\commandpage.o commandpage.cpp
 
 debug/configpage.o: configpage.cpp configpage.h \
@@ -2781,6 +2798,8 @@ debug/deadreckoningpage.o: deadreckoningpage.cpp deadreckoningpage.h \
 		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtGui/qicon.h \
 		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtWidgets/QCheckBox \
 		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtWidgets/qcheckbox.h \
+		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtWidgets/QLabel \
+		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtWidgets/qlabel.h \
 		../src/teseo_driver.h \
 		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtCore/QObject \
 		C:/Qt/QT5.15/5.15.2/mingw81_64/include/QtCore/QTimer \

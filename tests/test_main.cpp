@@ -7,23 +7,20 @@
 #include "test_checksum.h"
 #include "test_nmea_parser.h"
 
+#define RUN_TEST(Class) \
+    { \
+        Class t; \
+        int r = QTest::qExec(&t, argc, argv); \
+        if (r != 0) return r; \
+    }
+
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
-    int status = 0;
 
-    {
-        TestTypes test;
-        status |= QTest::qExec(&test, argc, argv);
-    }
-    {
-        TestChecksum test;
-        status |= QTest::qExec(&test, argc, argv);
-    }
-    {
-        TestNmeaParser test;
-        status |= QTest::qExec(&test, argc, argv);
-    }
+    RUN_TEST(TestTypes)
+    RUN_TEST(TestChecksum)
+    RUN_TEST(TestNmeaParser)
 
-    return status;
+    return 0;
 }

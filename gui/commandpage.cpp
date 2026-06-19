@@ -43,6 +43,7 @@ void CommandPage::createStartGroup(QVBoxLayout *parent)
     auto *grp = new QGroupBox("Start / Reset");
     auto *lay = new QHBoxLayout;
     lay->setSpacing(8);
+    lay->setContentsMargins(12, 16, 12, 12);
 
     auto *hotBtn = new QPushButton("Hot Start");
     auto *warmBtn = new QPushButton("Warm Start");
@@ -77,49 +78,55 @@ void CommandPage::createControlGroup(QVBoxLayout *parent)
     auto *grp = new QGroupBox("Constellation / SBAS / PPS");
     auto *grid = new QGridLayout;
     grid->setSpacing(8);
+    grid->setContentsMargins(12, 16, 12, 12);
     int r = 0;
 
-    grid->addWidget(new QLabel("Constellation mask:"), r, 0);
+    grid->addWidget(new QLabel("Mask:"), r, 0);
     auto *constSpin = new QSpinBox;
     constSpin->setRange(0, 255);
     constSpin->setValue(3);
+    constSpin->setMinimumWidth(70);
     constSpin->setToolTip("1=GPS, 2=GLONASS, 4=QZSS, 8=Galileo, 128=BeiDou");
     grid->addWidget(constSpin, r, 1);
     auto *constBtn = new QPushButton("Set");
     grid->addWidget(constBtn, r, 2);
-    connect(constBtn, &QPushButton::clicked, [this, constSpin]() {
-        m_driver->setConstellationMask(constSpin->value());
-        log("ConstMask: " + QString::number(constSpin->value()));
-    });
 
     auto *sbasAuto = new QPushButton("SBAS Auto");
     auto *sbasOff = new QPushButton("SBAS OFF");
     grid->addWidget(sbasAuto, r, 3);
     grid->addWidget(sbasOff, r, 4);
-    connect(sbasAuto, &QPushButton::clicked, [this]() { m_driver->enableSbasAuto(); log("SBAS Auto"); });
-    connect(sbasOff, &QPushButton::clicked, [this]() { m_driver->setSbasService(7); log("SBAS OFF"); });
-    r++;
 
     auto *nmeaOn = new QPushButton("NMEA ON");
     auto *nmeaOff = new QPushButton("NMEA OFF");
+    grid->addWidget(nmeaOn, r, 5);
+    grid->addWidget(nmeaOff, r, 6);
+    r++;
+
     auto *ppsOn = new QPushButton("PPS ON");
     auto *ppsOff = new QPushButton("PPS OFF");
-    grid->addWidget(nmeaOn, r, 0);
-    grid->addWidget(nmeaOff, r, 1);
-    grid->addWidget(ppsOn, r, 2);
-    grid->addWidget(ppsOff, r, 3);
+    auto *stbyOn = new QPushButton("Standby ON");
+    auto *stbyOff = new QPushButton("Standby OFF");
+    auto *forceStby = new QPushButton("Force Standby 10s");
+    grid->addWidget(ppsOn, r, 0);
+    grid->addWidget(ppsOff, r, 1);
+    grid->addWidget(stbyOn, r, 2);
+    grid->addWidget(stbyOff, r, 3);
+    grid->addWidget(forceStby, r, 4, 1, 3);
+
+    // Column stretch for buttons
+    for (int i = 0; i < 7; i++)
+        grid->setColumnStretch(i, 1);
+
+    connect(constBtn, &QPushButton::clicked, [this, constSpin]() {
+        m_driver->setConstellationMask(constSpin->value());
+        log("ConstMask: " + QString::number(constSpin->value()));
+    });
+    connect(sbasAuto, &QPushButton::clicked, [this]() { m_driver->enableSbasAuto(); log("SBAS Auto"); });
+    connect(sbasOff, &QPushButton::clicked, [this]() { m_driver->setSbasService(7); log("SBAS OFF"); });
     connect(nmeaOn, &QPushButton::clicked, [this]() { m_driver->setNmeaOutput(true); log("NMEA ON"); });
     connect(nmeaOff, &QPushButton::clicked, [this]() { m_driver->setNmeaOutput(false); log("NMEA OFF"); });
     connect(ppsOn, &QPushButton::clicked, [this]() { m_driver->ppsSetOnOff(true); log("PPS ON"); });
     connect(ppsOff, &QPushButton::clicked, [this]() { m_driver->ppsSetOnOff(false); log("PPS OFF"); });
-    r++;
-
-    auto *stbyOn = new QPushButton("Standby ON");
-    auto *stbyOff = new QPushButton("Standby OFF");
-    auto *forceStby = new QPushButton("Force Standby 10s");
-    grid->addWidget(stbyOn, r, 0);
-    grid->addWidget(stbyOff, r, 1);
-    grid->addWidget(forceStby, r, 2);
     connect(stbyOn, &QPushButton::clicked, [this]() { m_driver->setStandbyEnable(true); log("Standby ON"); });
     connect(stbyOff, &QPushButton::clicked, [this]() { m_driver->setStandbyEnable(false); log("Standby OFF"); });
     connect(forceStby, &QPushButton::clicked, [this]() { m_driver->forceStandby(10); log("Force Standby"); });
@@ -133,6 +140,7 @@ void CommandPage::createMiscGroup(QVBoxLayout *parent)
     auto *grp = new QGroupBox("Algorithms / RF Test / IMU");
     auto *grid = new QGridLayout;
     grid->setSpacing(8);
+    grid->setContentsMargins(12, 16, 12, 12);
     int r = 0;
 
     auto *fdeOn = new QPushButton("FDE ON");
@@ -145,6 +153,9 @@ void CommandPage::createMiscGroup(QVBoxLayout *parent)
     grid->addWidget(rfOn, r, 2);
     grid->addWidget(rfOff, r, 3);
     grid->addWidget(imuBtn, r, 4);
+
+    for (int i = 0; i < 5; i++)
+        grid->setColumnStretch(i, 1);
 
     connect(fdeOn, &QPushButton::clicked, [this]() { m_driver->setAlgorithmStatus(1, true); log("FDE ON"); });
     connect(fdeOff, &QPushButton::clicked, [this]() { m_driver->setAlgorithmStatus(1, false); log("FDE OFF"); });
@@ -161,6 +172,7 @@ void CommandPage::createCustomGroup(QVBoxLayout *parent)
     auto *grp = new QGroupBox("Custom Command");
     auto *lay = new QHBoxLayout;
     lay->setSpacing(8);
+    lay->setContentsMargins(12, 16, 12, 12);
 
     auto *cmdEdit = new QLineEdit;
     cmdEdit->setPlaceholderText("$PSTM... (without checksum)");

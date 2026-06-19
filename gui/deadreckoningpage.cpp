@@ -18,15 +18,17 @@ DeadReckoningPage::DeadReckoningPage(Teseo::TeseoDriver *driver, QWidget *parent
 
     // Top row: MMFB + SoU
     auto *topRow = new QHBoxLayout;
-    topRow->setSpacing(10);
+    topRow->setSpacing(12);
 
     // MMFB card
     auto *mmfbGroup = new QGroupBox("Map Matching Feedback");
     auto *mmfbForm = new QFormLayout;
-    mmfbForm->setSpacing(6);
+    mmfbForm->setSpacing(8);
+    mmfbForm->setContentsMargins(12, 16, 12, 12);
 
     auto *mmfbTime = new QLineEdit;
     mmfbTime->setText("120000.000");
+    mmfbTime->setMinimumWidth(120);
     mmfbForm->addRow("Timestamp:", mmfbTime);
 
     auto *mmfbLatValid = new QCheckBox("Lat Valid");
@@ -39,10 +41,12 @@ DeadReckoningPage::DeadReckoningPage(Teseo::TeseoDriver *driver, QWidget *parent
 
     auto *mmfbLat = new QDoubleSpinBox;
     mmfbLat->setRange(-90, 90); mmfbLat->setDecimals(7);
+    mmfbLat->setMinimumWidth(140);
     mmfbForm->addRow("Latitude:", mmfbLat);
 
     auto *mmfbLon = new QDoubleSpinBox;
     mmfbLon->setRange(-180, 180); mmfbLon->setDecimals(7);
+    mmfbLon->setMinimumWidth(140);
     mmfbForm->addRow("Longitude:", mmfbLon);
 
     auto *mmfbLatErr = new QDoubleSpinBox;
@@ -57,30 +61,35 @@ DeadReckoningPage::DeadReckoningPage(Teseo::TeseoDriver *driver, QWidget *parent
     mmfbForm->addRow(mmfbBtn);
 
     mmfbGroup->setLayout(mmfbForm);
-    topRow->addWidget(mmfbGroup);
+    topRow->addWidget(mmfbGroup, 1);
 
     // SoU + DR card
     auto *souGroup = new QGroupBox("Sensors & DR Control");
     auto *souGrid = new QGridLayout;
-    souGrid->setSpacing(6);
+    souGrid->setSpacing(8);
+    souGrid->setContentsMargins(12, 16, 12, 12);
     int r = 0;
 
     souGrid->addWidget(new QLabel("Sensor ID:"), r, 0);
     auto *sensorId = new QSpinBox;
     sensorId->setRange(0, 99);
     sensorId->setValue(31);
+    sensorId->setMinimumWidth(70);
     sensorId->setToolTip("1=Odo, 2=Reverse, 4=1-axis Gyro, 14=Speed, 30=3-axis Acc, 31=3-axis Gyro");
-    souGrid->addWidget(sensorId, r, 1);
+    souGrid->addWidget(sensorId, r, 1, 1, 2);
     r++;
 
     souGrid->addWidget(new QLabel("X:"), r, 0);
     auto *vx = new QSpinBox; vx->setRange(-99999, 99999);
+    vx->setMinimumWidth(80);
     souGrid->addWidget(vx, r, 1);
     souGrid->addWidget(new QLabel("Y:"), r, 2);
     auto *vy = new QSpinBox; vy->setRange(-99999, 99999);
+    vy->setMinimumWidth(80);
     souGrid->addWidget(vy, r, 3);
     souGrid->addWidget(new QLabel("Z:"), r, 4);
     auto *vz = new QSpinBox; vz->setRange(-99999, 99999);
+    vz->setMinimumWidth(80);
     souGrid->addWidget(vz, r, 5);
     r++;
 
@@ -95,23 +104,33 @@ DeadReckoningPage::DeadReckoningPage(Teseo::TeseoDriver *driver, QWidget *parent
     // Odometer
     souGrid->addWidget(new QLabel("Odometer:"), r, 0);
     auto *odoEn = new QCheckBox("Enable");
-    souGrid->addWidget(odoEn, r, 1);
+    souGrid->addWidget(odoEn, r, 1, 1, 2);
     auto *odoBtn = new QPushButton("Apply");
-    souGrid->addWidget(odoBtn, r, 2);
+    souGrid->addWidget(odoBtn, r, 3);
     r++;
 
     // Anti-jamming
     souGrid->addWidget(new QLabel("AJM GPS:"), r, 0);
     auto *ajmGps = new QSpinBox; ajmGps->setRange(0, 2);
+    ajmGps->setMinimumWidth(60);
     souGrid->addWidget(ajmGps, r, 1);
     souGrid->addWidget(new QLabel("AJM GLO:"), r, 2);
     auto *ajmGlo = new QSpinBox; ajmGlo->setRange(0, 2);
+    ajmGlo->setMinimumWidth(60);
     souGrid->addWidget(ajmGlo, r, 3);
     auto *ajmBtn = new QPushButton("Apply AJM");
     souGrid->addWidget(ajmBtn, r, 4, 1, 2);
 
+    // Column stretch
+    souGrid->setColumnStretch(0, 0);
+    souGrid->setColumnStretch(1, 1);
+    souGrid->setColumnStretch(2, 0);
+    souGrid->setColumnStretch(3, 1);
+    souGrid->setColumnStretch(4, 0);
+    souGrid->setColumnStretch(5, 1);
+
     souGroup->setLayout(souGrid);
-    topRow->addWidget(souGroup);
+    topRow->addWidget(souGroup, 2);
     mainLayout->addLayout(topRow);
 
     // Log

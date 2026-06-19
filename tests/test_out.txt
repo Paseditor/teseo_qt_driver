@@ -12,5 +12,5 @@ PASS   : TestNmeaParser::parseMultiple()
 PASS   : TestNmeaParser::invalidChecksumIgnored()
 PASS   : TestNmeaParser::partialDataBuffered()
 PASS   : TestNmeaParser::cleanupTestCase()
-Totals: 12 passed, 0 failed, 0 skipped, 0 blacklisted, 1ms
+Totals: 12 passed, 0 failed, 0 skipped, 0 blacklisted, 2ms
 ********* Finished testing of TestNmeaParser *********

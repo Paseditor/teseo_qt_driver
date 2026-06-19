@@ -19,9 +19,9 @@ MainWindow::MainWindow(QWidget *parent)
     , m_statusLabel(new QLabel(this))
     , m_versionLabel(new QLabel(this))
 {
-    setWindowTitle("ArneeCode | Teseo-VIC3 Test Tool");
-    resize(1024, 700);
-    setMinimumSize(900, 600);
+    setWindowTitle("ArneeCode  |  Teseo-VIC3 GNSS Test Tool");
+    resize(1100, 720);
+    setMinimumSize(960, 640);
 
     m_connPage = new ConnectionPage(m_driver, this);
     m_infoPage = new InfoPage(m_driver, this);
@@ -31,21 +31,21 @@ MainWindow::MainWindow(QWidget *parent)
     m_drPage = new DeadReckoningPage(m_driver, this);
     m_logPage = new LogPage(m_driver, this);
 
-    m_tabs->addTab(m_connPage, "  Connection  ");
-    m_tabs->addTab(m_infoPage, "  GNSS Info  ");
-    m_tabs->addTab(m_cmdPage, "  Commands  ");
-    m_tabs->addTab(m_cfgPage, "  Configuration  ");
-    m_tabs->addTab(m_agnssPage, "  AGNSS  ");
-    m_tabs->addTab(m_drPage, "  Dead Reckoning  ");
-    m_tabs->addTab(m_logPage, "  Log  ");
+    m_tabs->addTab(m_connPage, QString::fromUtf8("  \xe2\x9a\x99  Connection  "));
+    m_tabs->addTab(m_infoPage, QString::fromUtf8("  \xf0\x9f\x93\xa1  GNSS Info  "));
+    m_tabs->addTab(m_cmdPage, QString::fromUtf8("  \xe2\x9a\xa1  Commands  "));
+    m_tabs->addTab(m_cfgPage, QString::fromUtf8("  \xf0\x9f\x94\xa7  Configuration  "));
+    m_tabs->addTab(m_agnssPage, QString::fromUtf8("  \xf0\x9f\x9b\xb0  AGNSS  "));
+    m_tabs->addTab(m_drPage, QString::fromUtf8("  \xf0\x9f\x9a\x97  Dead Reckoning  "));
+    m_tabs->addTab(m_logPage, QString::fromUtf8("  \xf0\x9f\x93\x8b  Log  "));
 
     setCentralWidget(m_tabs);
 
-    m_statusLabel->setText("Disconnected");
-    m_statusLabel->setStyleSheet("color: #f87171; font-weight: 600; padding: 0 8px;");
+    m_statusLabel->setText(QString::fromUtf8("\xe2\x97\x8b  Disconnected"));
+    m_statusLabel->setStyleSheet("color: #ef4444; font-weight: 600; padding: 0 10px; font-size: 12px;");
 
-    m_versionLabel->setText("ArneeCode v1.0.0");
-    m_versionLabel->setStyleSheet("color: #64748b; padding: 0 8px;");
+    m_versionLabel->setText("ArneeCode  v1.0.0  |  2026");
+    m_versionLabel->setStyleSheet("color: #3d4466; padding: 0 10px; font-size: 11px; letter-spacing: 0.3px;");
 
     statusBar()->addPermanentWidget(m_statusLabel);
     statusBar()->addPermanentWidget(m_versionLabel);
@@ -62,18 +62,18 @@ MainWindow::~MainWindow() {}
 
 void MainWindow::onConnected()
 {
-    m_statusLabel->setText("Connected");
-    m_statusLabel->setStyleSheet("color: #4ade80; font-weight: 600; padding: 0 8px;");
+    m_statusLabel->setText(QString::fromUtf8("\xe2\x9f\xb5  Connected"));
+    m_statusLabel->setStyleSheet("color: #22c55e; font-weight: 600; padding: 0 10px; font-size: 12px;");
 }
 
 void MainWindow::onDisconnected()
 {
-    m_statusLabel->setText("Disconnected");
-    m_statusLabel->setStyleSheet("color: #f87171; font-weight: 600; padding: 0 8px;");
+    m_statusLabel->setText(QString::fromUtf8("\xe2\x97\x8b  Disconnected"));
+    m_statusLabel->setStyleSheet("color: #ef4444; font-weight: 600; padding: 0 10px; font-size: 12px;");
 }
 
 void MainWindow::onError(const QString &error)
 {
-    m_statusLabel->setText("Error: " + error);
-    m_statusLabel->setStyleSheet("color: #fbbf24; font-weight: 600; padding: 0 8px;");
+    m_statusLabel->setText(QString::fromUtf8("\xe2\x9a\xa0  Error: ") + error);
+    m_statusLabel->setStyleSheet("color: #f59e0b; font-weight: 600; padding: 0 10px; font-size: 12px;");
 }

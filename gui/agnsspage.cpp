@@ -18,15 +18,17 @@ AGNSSPage::AGNSSPage(Teseo::TeseoDriver *driver, QWidget *parent)
 
     // Top row: Init + Freq
     auto *topRow = new QHBoxLayout;
-    topRow->setSpacing(10);
+    topRow->setSpacing(12);
 
     // Init card
     auto *initGroup = new QGroupBox("Initialize Position & Time");
     auto *initForm = new QFormLayout;
-    initForm->setSpacing(6);
+    initForm->setSpacing(8);
+    initForm->setContentsMargins(12, 16, 12, 12);
 
     auto *latSpin = new QDoubleSpinBox;
     latSpin->setRange(-90, 90); latSpin->setDecimals(6);
+    latSpin->setMinimumWidth(140);
     initForm->addRow("Lat:", latSpin);
 
     auto *latRef = new QComboBox;
@@ -35,6 +37,7 @@ AGNSSPage::AGNSSPage(Teseo::TeseoDriver *driver, QWidget *parent)
 
     auto *lonSpin = new QDoubleSpinBox;
     lonSpin->setRange(-180, 180); lonSpin->setDecimals(6);
+    lonSpin->setMinimumWidth(140);
     initForm->addRow("Lon:", lonSpin);
 
     auto *lonRef = new QComboBox;
@@ -61,36 +64,38 @@ AGNSSPage::AGNSSPage(Teseo::TeseoDriver *driver, QWidget *parent)
     initForm->addRow(initTimeBtn);
 
     initGroup->setLayout(initForm);
-    topRow->addWidget(initGroup);
+    topRow->addWidget(initGroup, 1);
 
     // Freq + ST-AGPS card
     auto *freqGroup = new QGroupBox("Frequency & ST-AGNSS");
     auto *freqGrid = new QGridLayout;
-    freqGrid->setSpacing(6);
+    freqGrid->setSpacing(8);
+    freqGrid->setContentsMargins(12, 16, 12, 12);
     int r = 0;
 
     freqGrid->addWidget(new QLabel("Freq Offset (Hz):"), r, 0);
     auto *freqSpin = new QSpinBox;
     freqSpin->setRange(-100000, 100000);
-    freqGrid->addWidget(freqSpin, r, 1);
+    freqSpin->setMinimumWidth(100);
+    freqGrid->addWidget(freqSpin, r, 1, 1, 2);
     auto *freqBtn = new QPushButton("Set");
-    freqGrid->addWidget(freqBtn, r, 2);
+    freqGrid->addWidget(freqBtn, r, 3);
     r++;
 
     auto *stagOn = new QPushButton("ST-AGPS ON");
     auto *stagOff = new QPushButton("ST-AGPS OFF");
     auto *stagStatus = new QPushButton("Get Status");
     freqGrid->addWidget(stagOn, r, 0);
-    freqGrid->addWidget(stagOff, r, 1);
-    freqGrid->addWidget(stagStatus, r, 2);
+    freqGrid->addWidget(stagOff, r, 1, 1, 2);
+    freqGrid->addWidget(stagStatus, r, 3);
     r++;
 
     auto *stagInv = new QPushButton("Invalidate All");
     auto *agpsOn = new QPushButton("AGPS ON");
     auto *agpsOff = new QPushButton("AGPS OFF");
     freqGrid->addWidget(stagInv, r, 0);
-    freqGrid->addWidget(agpsOn, r, 1);
-    freqGrid->addWidget(agpsOff, r, 2);
+    freqGrid->addWidget(agpsOn, r, 1, 1, 2);
+    freqGrid->addWidget(agpsOff, r, 3);
     r++;
 
     auto *dumpAlm = new QPushButton("Dump Alm");
@@ -102,8 +107,13 @@ AGNSSPage::AGNSSPage(Teseo::TeseoDriver *driver, QWidget *parent)
     freqGrid->addWidget(dumpEph, r, 2);
     freqGrid->addWidget(clrEph, r, 3);
 
+    freqGrid->setColumnStretch(0, 1);
+    freqGrid->setColumnStretch(1, 1);
+    freqGrid->setColumnStretch(2, 1);
+    freqGrid->setColumnStretch(3, 1);
+
     freqGroup->setLayout(freqGrid);
-    topRow->addWidget(freqGroup);
+    topRow->addWidget(freqGroup, 1);
     mainLayout->addLayout(topRow);
 
     // Log

@@ -1,0 +1,14 @@
+********* Start testing of TestChecksum *********
+Config: Using QtTest library 5.15.2, Qt 5.15.2 (x86_64-little_endian-llp64 shared (dynamic) release build; by GCC 8.1.0), windows 10
+PASS   : TestChecksum::initTestCase()
+FAIL!  : TestChecksum::validChecksum() 'Teseo::NmeaParser::validateChecksum(sentence)' returned FALSE. ()
+test_checksum.cpp(11) : failure location
+PASS   : TestChecksum::invalidChecksum()
+FAIL!  : TestChecksum::computeChecksum() Compared values are not the same
+   Actual   (checksum)        : "60"
+   Expected (QByteArray("53")): "53"
+test_checksum.cpp(24) : failure location
+PASS   : TestChecksum::noStarReturnsInvalid()
+PASS   : TestChecksum::cleanupTestCase()
+Totals: 4 passed, 2 failed, 0 skipped, 0 blacklisted, 0ms
+********* Finished testing of TestChecksum *********

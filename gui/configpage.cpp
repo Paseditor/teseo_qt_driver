@@ -18,26 +18,31 @@ ConfigPage::ConfigPage(Teseo::TeseoDriver *driver, QWidget *parent)
 
     // Top row: CDB + Quick
     auto *topRow = new QHBoxLayout;
-    topRow->setSpacing(10);
+    topRow->setSpacing(12);
 
     // CDB Parameter card
     auto *parGroup = new QGroupBox("CDB Parameters");
     auto *parForm = new QFormLayout;
-    parForm->setSpacing(8);
+    parForm->setSpacing(10);
+    parForm->setContentsMargins(12, 16, 12, 12);
 
     auto *blockCombo = new QComboBox;
     blockCombo->addItems({"1 - Current", "2 - Default", "3 - NVM"});
+    blockCombo->setMinimumWidth(120);
     parForm->addRow("Block:", blockCombo);
 
     auto *idSpin = new QSpinBox;
     idSpin->setRange(0, 999);
+    idSpin->setMinimumWidth(100);
     parForm->addRow("ID:", idSpin);
 
     auto *valueEdit = new QLineEdit;
     valueEdit->setPlaceholderText("Hex value");
+    valueEdit->setMinimumWidth(120);
     parForm->addRow("Value:", valueEdit);
 
     auto *parBtns = new QHBoxLayout;
+    parBtns->setSpacing(6);
     auto *getBtn = new QPushButton("GET");
     auto *setBtn = new QPushButton("SET");
     auto *saveBtn = new QPushButton("SAVE");
@@ -49,50 +54,59 @@ ConfigPage::ConfigPage(Teseo::TeseoDriver *driver, QWidget *parent)
     parForm->addRow(parBtns);
 
     parGroup->setLayout(parForm);
-    topRow->addWidget(parGroup);
+    topRow->addWidget(parGroup, 1);
 
     // Quick config card
     auto *quickGroup = new QGroupBox("Quick Config");
     auto *qGrid = new QGridLayout;
-    qGrid->setSpacing(6);
+    qGrid->setSpacing(8);
+    qGrid->setContentsMargins(12, 16, 12, 12);
     int r = 0;
 
     qGrid->addWidget(new QLabel("Baud:"), r, 0);
     auto *baudCombo = new QComboBox;
     baudCombo->addItems({"9600","19200","38400","57600","115200","230400","460800","921600"});
     baudCombo->setCurrentText("115200");
-    qGrid->addWidget(baudCombo, r, 1);
+    baudCombo->setMinimumWidth(90);
+    qGrid->addWidget(baudCombo, r, 1, 1, 2);
     auto *baudBtn = new QPushButton("Set");
-    qGrid->addWidget(baudBtn, r, 2);
+    qGrid->addWidget(baudBtn, r, 3);
 
-    qGrid->addWidget(new QLabel("Rate:"), r, 3);
+    qGrid->addWidget(new QLabel("Rate:"), r, 4);
     auto *rateSpin = new QSpinBox;
     rateSpin->setRange(1, 20);
-    qGrid->addWidget(rateSpin, r, 4);
+    rateSpin->setMinimumWidth(60);
+    qGrid->addWidget(rateSpin, r, 5);
     auto *rateBtn = new QPushButton("Set");
-    qGrid->addWidget(rateBtn, r, 5);
+    qGrid->addWidget(rateBtn, r, 6);
     r++;
 
     qGrid->addWidget(new QLabel("GPS:"), r, 0);
     auto *gpsCombo = new QComboBox;
     gpsCombo->addItems({"Off","Track","Use"});
     gpsCombo->setCurrentIndex(2);
-    qGrid->addWidget(gpsCombo, r, 1);
+    qGrid->addWidget(gpsCombo, r, 1, 1, 2);
 
-    qGrid->addWidget(new QLabel("GLO:"), r, 2);
+    qGrid->addWidget(new QLabel("GLO:"), r, 3);
     auto *gloCombo = new QComboBox;
     gloCombo->addItems({"Off","Track","Use"});
     gloCombo->setCurrentIndex(2);
-    qGrid->addWidget(gloCombo, r, 3);
+    qGrid->addWidget(gloCombo, r, 4, 1, 2);
+    r++;
 
-    qGrid->addWidget(new QLabel("GAL:"), r, 4);
+    qGrid->addWidget(new QLabel("GAL:"), r, 0);
     auto *galCombo = new QComboBox;
     galCombo->addItems({"Off","Track","Use"});
-    qGrid->addWidget(galCombo, r, 5);
+    qGrid->addWidget(galCombo, r, 1, 1, 2);
+
+    qGrid->addWidget(new QLabel("BDS:"), r, 3);
+    auto *bdsCombo = new QComboBox;
+    bdsCombo->addItems({"Off","Track","Use"});
+    qGrid->addWidget(bdsCombo, r, 4, 1, 2);
     r++;
 
     auto *constBtn = new QPushButton("Apply Constellations");
-    qGrid->addWidget(constBtn, r, 0, 1, 6);
+    qGrid->addWidget(constBtn, r, 0, 1, 7);
     r++;
 
     qGrid->addWidget(new QLabel("Trk CN0:"), r, 0);
@@ -100,40 +114,58 @@ ConfigPage::ConfigPage(Teseo::TeseoDriver *driver, QWidget *parent)
     qGrid->addWidget(trkCn0, r, 1);
     qGrid->addWidget(new QLabel("Pos CN0:"), r, 2);
     auto *posCn0 = new QSpinBox; posCn0->setRange(0, 50);
-    qGrid->addWidget(posCn0, r, 3);
+    qGrid->addWidget(posCn0, r, 3, 1, 2);
     auto *thrBtn = new QPushButton("Apply Thresholds");
-    qGrid->addWidget(thrBtn, r, 4, 1, 2);
+    qGrid->addWidget(thrBtn, r, 5, 1, 2);
+
+    // Column stretch
+    qGrid->setColumnStretch(0, 0);
+    qGrid->setColumnStretch(1, 1);
+    qGrid->setColumnStretch(2, 0);
+    qGrid->setColumnStretch(3, 0);
+    qGrid->setColumnStretch(4, 1);
+    qGrid->setColumnStretch(5, 1);
+    qGrid->setColumnStretch(6, 0);
 
     quickGroup->setLayout(qGrid);
-    topRow->addWidget(quickGroup);
+    topRow->addWidget(quickGroup, 2);
     mainLayout->addLayout(topRow);
 
     // RTCM row
     auto *rtcmGroup = new QGroupBox("RTCM (Differential Corrections)");
     auto *rtcmGrid = new QGridLayout;
-    rtcmGrid->setSpacing(6);
+    rtcmGrid->setSpacing(8);
+    rtcmGrid->setContentsMargins(12, 16, 12, 12);
     r = 0;
 
     rtcmGrid->addWidget(new QLabel("Source:"), r, 0);
     auto *diffCombo = new QComboBox;
     diffCombo->addItems({"0-NONE", "1-SBAS", "2-RTCM", "3-AUTO"});
     diffCombo->setCurrentIndex(3);
-    rtcmGrid->addWidget(diffCombo, r, 1);
+    diffCombo->setMinimumWidth(100);
+    rtcmGrid->addWidget(diffCombo, r, 1, 1, 2);
     auto *diffBtn = new QPushButton("Apply");
-    rtcmGrid->addWidget(diffBtn, r, 2);
+    rtcmGrid->addWidget(diffBtn, r, 3);
 
     auto *rtcmOn = new QPushButton("RTCM ON");
     auto *rtcmOff = new QPushButton("RTCM OFF");
-    rtcmGrid->addWidget(rtcmOn, r, 3);
-    rtcmGrid->addWidget(rtcmOff, r, 4);
+    rtcmGrid->addWidget(rtcmOn, r, 4);
+    rtcmGrid->addWidget(rtcmOff, r, 5);
     r++;
 
     rtcmGrid->addWidget(new QLabel("RTCM Data (hex):"), r, 0);
     auto *rtcmDataEdit = new QLineEdit;
-    rtcmDataEdit->setPlaceholderText("Raw RTCM frame...");
-    rtcmGrid->addWidget(rtcmDataEdit, r, 1, 1, 3);
+    rtcmDataEdit->setPlaceholderText("Raw RTCM frame hex...");
+    rtcmGrid->addWidget(rtcmDataEdit, r, 1, 1, 4);
     auto *rtcmSend = new QPushButton("Send RTCM");
-    rtcmGrid->addWidget(rtcmSend, r, 4);
+    rtcmGrid->addWidget(rtcmSend, r, 5);
+
+    rtcmGrid->setColumnStretch(0, 0);
+    rtcmGrid->setColumnStretch(1, 1);
+    rtcmGrid->setColumnStretch(2, 1);
+    rtcmGrid->setColumnStretch(3, 0);
+    rtcmGrid->setColumnStretch(4, 0);
+    rtcmGrid->setColumnStretch(5, 0);
 
     rtcmGroup->setLayout(rtcmGrid);
     mainLayout->addWidget(rtcmGroup);
@@ -160,11 +192,12 @@ ConfigPage::ConfigPage(Teseo::TeseoDriver *driver, QWidget *parent)
     connect(restoreBtn, &QPushButton::clicked, [this]() { m_driver->restoreFactoryParameters(); m_resultEdit->append("RESTORE"); });
     connect(baudBtn, &QPushButton::clicked, [this, baudCombo]() { m_driver->setBaudRate(baudCombo->currentText().toInt()); });
     connect(rateBtn, &QPushButton::clicked, [this, rateSpin]() { m_driver->setFixRate(rateSpin->value()); });
-    connect(constBtn, &QPushButton::clicked, [this, gpsCombo, gloCombo, galCombo]() {
+    connect(constBtn, &QPushButton::clicked, [this, gpsCombo, gloCombo, galCombo, bdsCombo]() {
         Teseo::ConstellationConfig cfg;
         cfg.gps = gpsCombo->currentIndex() + 1;
         cfg.glonass = gloCombo->currentIndex() + 1;
         cfg.galileo = galCombo->currentIndex() + 1;
+        cfg.beidou = bdsCombo->currentIndex() + 1;
         m_driver->cfgConstellations(cfg);
         m_resultEdit->append("Applied constellations");
     });

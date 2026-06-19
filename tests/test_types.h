@@ -11,7 +11,6 @@ class TestTypes : public QObject
 {
     Q_OBJECT
 private slots:
-    void positionDecimal_data();
     void positionDecimal();
     void fixQualityEnum();
     void constellationEnum();
