@@ -15,3 +15,4 @@ debug/moc_configpage.o
 debug/moc_agnsspage.o
 debug/moc_deadreckoningpage.o
 debug/moc_logpage.o
+debug/moc_splashscreen.o

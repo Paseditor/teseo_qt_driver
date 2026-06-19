@@ -1,5 +1,5 @@
 // ArneeCode - Teseo-VIC3 Qt Driver
-// Copyright (c) 2024 ArneeCode. All rights reserved.
+// Copyright (c) 2026 ArneeCode. All rights reserved.
 
 #ifndef TESEO_TYPES_H
 #define TESEO_TYPES_H

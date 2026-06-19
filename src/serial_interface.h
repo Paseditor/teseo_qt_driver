@@ -1,5 +1,5 @@
 // ArneeCode - Teseo-VIC3 Qt Driver
-// Copyright (c) 2024 ArneeCode. All rights reserved.
+// Copyright (c) 2026 ArneeCode. All rights reserved.
 
 #ifndef SERIAL_INTERFACE_H
 #define SERIAL_INTERFACE_H

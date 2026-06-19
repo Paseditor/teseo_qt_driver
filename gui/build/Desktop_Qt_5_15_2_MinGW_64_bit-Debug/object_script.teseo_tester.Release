@@ -15,3 +15,4 @@ release/moc_configpage.o
 release/moc_agnsspage.o
 release/moc_deadreckoningpage.o
 release/moc_logpage.o
+release/moc_splashscreen.o

@@ -1,6 +1,6 @@
 # ArneeCode | Teseo-VIC3 Qt Driver
 
-**Copyright (c) 2024 ArneeCode. All rights reserved.**
+**Copyright (c) 2026 ArneeCode. All rights reserved.**
 
 Qt 5.15.2 драйвер для GNSS модуля STMicroelectronics Teseo-VIC3 (UM2791 Rev 3).
 
