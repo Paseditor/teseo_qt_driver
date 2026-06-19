@@ -1,0 +1,31 @@
+********* Start testing of TestNmeaParser *********
+Config: Using QtTest library 5.15.2, Qt 5.15.2 (x86_64-little_endian-llp64 shared (dynamic) release build; by GCC 8.1.0), windows 10
+PASS   : TestNmeaParser::initTestCase()
+FAIL!  : TestNmeaParser::parseGGA() Compared values are not the same
+   Actual   (spy.count()): 0
+   Expected (1)          : 1
+test_nmea_parser.cpp(16) : failure location
+FAIL!  : TestNmeaParser::parseRMC() Compared values are not the same
+   Actual   (spy.count()): 0
+   Expected (1)          : 1
+test_nmea_parser.cpp(33) : failure location
+PASS   : TestNmeaParser::parseGSA()
+PASS   : TestNmeaParser::parseGSV()
+FAIL!  : TestNmeaParser::parseVTG() Compared values are not the same
+   Actual   (spy.count()): 0
+   Expected (1)          : 1
+test_nmea_parser.cpp(80) : failure location
+PASS   : TestNmeaParser::parseZDA()
+PASS   : TestNmeaParser::parseGST()
+FAIL!  : TestNmeaParser::parseMultiple() Compared values are not the same
+   Actual   (fixSpy.count()): 0
+   Expected (1)             : 1
+test_nmea_parser.cpp(126) : failure location
+PASS   : TestNmeaParser::invalidChecksumIgnored()
+FAIL!  : TestNmeaParser::partialDataBuffered() Compared values are not the same
+   Actual   (spy.count()): 0
+   Expected (1)          : 1
+test_nmea_parser.cpp(155) : failure location
+PASS   : TestNmeaParser::cleanupTestCase()
+Totals: 7 passed, 5 failed, 0 skipped, 0 blacklisted, 1ms
+********* Finished testing of TestNmeaParser *********

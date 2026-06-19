@@ -1,0 +1,16 @@
+********* Start testing of TestNmeaParser *********
+Config: Using QtTest library 5.15.2, Qt 5.15.2 (x86_64-little_endian-llp64 shared (dynamic) release build; by GCC 8.1.0), windows 10
+PASS   : TestNmeaParser::initTestCase()
+PASS   : TestNmeaParser::parseGGA()
+PASS   : TestNmeaParser::parseRMC()
+PASS   : TestNmeaParser::parseGSA()
+PASS   : TestNmeaParser::parseGSV()
+PASS   : TestNmeaParser::parseVTG()
+PASS   : TestNmeaParser::parseZDA()
+PASS   : TestNmeaParser::parseGST()
+PASS   : TestNmeaParser::parseMultiple()
+PASS   : TestNmeaParser::invalidChecksumIgnored()
+PASS   : TestNmeaParser::partialDataBuffered()
+PASS   : TestNmeaParser::cleanupTestCase()
+Totals: 12 passed, 0 failed, 0 skipped, 0 blacklisted, 1ms
+********* Finished testing of TestNmeaParser *********

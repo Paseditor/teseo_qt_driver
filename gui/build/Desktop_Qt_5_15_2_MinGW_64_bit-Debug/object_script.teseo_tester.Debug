@@ -1,0 +1,17 @@
+debug/main.o
+debug/mainwindow.o
+debug/connectionpage.o
+debug/infopage.o
+debug/commandpage.o
+debug/configpage.o
+debug/agnsspage.o
+debug/deadreckoningpage.o
+debug/logpage.o
+debug/moc_mainwindow.o
+debug/moc_connectionpage.o
+debug/moc_infopage.o
+debug/moc_commandpage.o
+debug/moc_configpage.o
+debug/moc_agnsspage.o
+debug/moc_deadreckoningpage.o
+debug/moc_logpage.o
