@@ -1,0 +1,54 @@
+# Build output
+build/
+release/
+debug/
+*.o
+*.obj
+*.exe
+*.dll
+*.lib
+*.a
+*.so
+*.dylib
+
+# Qt generated files
+*.pro.user
+*.pro.user.*
+*.qmake.stash
+moc_*.cpp
+moc_*.h
+ui_*.h
+qrc_*.cpp
+Makefile
+Makefile.*
+*.moc
+
+# Qt Creator
+.qtcreator/
+
+# IDE files
+.vs/
+.vscode/
+*.suo
+*.user
+*.sln
+*.vcxproj*
+
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Test output
+tests/*.txt
+tests/release/
+tests/debug/
+
+# GUI build artifacts
+gui/build/
+gui/release/
+gui/debug/
+
+# NMEA logs
+*.nmea
+*.log

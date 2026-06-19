@@ -21,6 +21,10 @@ void NmeaParser::registerHandlers()
     m_handlers["VTG"] = [this](const QVector<QByteArray> &f) { parseVTG(f); };
     m_handlers["ZDA"] = [this](const QVector<QByteArray> &f) { parseZDA(f); };
     m_handlers["GST"] = [this](const QVector<QByteArray> &f) { parseGST(f); };
+    m_handlers["GBS"] = [this](const QVector<QByteArray> &f) { parseGBS(f); };
+    m_handlers["GNS"] = [this](const QVector<QByteArray> &f) { parseGNS(f); };
+    m_handlers["DTM"] = [this](const QVector<QByteArray> &f) { parseDTM(f); };
+    m_handlers["GLL"] = [this](const QVector<QByteArray> &f) { parseGLL(f); };
 }
 
 void NmeaParser::processData(const QByteArray &data)
@@ -308,6 +312,103 @@ void NmeaParser::parseGST(const QVector<QByteArray> &fields)
     emit accuracyUpdated(m_data.accuracy);
 }
 
+void NmeaParser::parseGBS(const QVector<QByteArray> &fields)
+{
+    if (fields.size() < 9) return;
+    // $xxGBS,<Timestamp>,<LatErr>,<LonErr>,<AltErr>,<SatPRN>,<Prob>,<Res>,<StdDev>
+    m_data.accuracy.latErr = fields[2].toDouble();
+    m_data.accuracy.lonErr = fields[3].toDouble();
+    m_data.accuracy.altErr = fields[4].toDouble();
+    emit accuracyUpdated(m_data.accuracy);
+}
+
+void NmeaParser::parseGNS(const QVector<QByteArray> &fields)
+{
+    if (fields.size() < 13) return;
+    // $xxGNS,<Timestamp>,<Lat>,<N/S>,<Long>,<E/W>,<Mode>,<Sats>,<HDOP>,<Alt>,<GeoSep>,<DGPSAge>,<DGPSRef>
+    QByteArray ts = fields[1];
+    if (ts.size() >= 6) {
+        int h = ts.mid(0, 2).toInt();
+        int m = ts.mid(2, 2).toInt();
+        int s = ts.mid(4, 2).toInt();
+        int ms = (ts.size() > 7) ? ts.mid(7).leftJustified(3, '0').left(3).toInt() : 0;
+        QTime time(h, m, s, ms);
+        if (m_data.utcDateTime.date().isValid())
+            m_data.utcDateTime.setTime(time);
+        else
+            m_data.utcDateTime = QDateTime(QDate::currentDate(), time);
+    }
+
+    if (!fields[2].isEmpty()) {
+        m_data.position.latitude = fields[2].toDouble();
+        m_data.position.latDirection = fields[3].isEmpty() ? 'N' : fields[3][0];
+    }
+    if (!fields[4].isEmpty()) {
+        m_data.position.longitude = fields[4].toDouble();
+        m_data.position.lonDirection = fields[5].isEmpty() ? 'E' : fields[5][0];
+    }
+
+    QByteArray mode = fields[6];
+    if (!mode.isEmpty()) {
+        char modeChar = mode[0];
+        if (modeChar == 'N') {
+            m_data.fixQuality = FixQuality::Invalid;
+            m_data.valid = false;
+        } else if (modeChar == 'D') {
+            m_data.fixQuality = FixQuality::DGPS;
+            m_data.valid = true;
+        } else if (modeChar == 'E') {
+            m_data.fixQuality = FixQuality::Estimated;
+            m_data.valid = true;
+        } else if (modeChar == 'A') {
+            m_data.fixQuality = FixQuality::GPS;
+            m_data.valid = true;
+        }
+    }
+
+    m_data.satellitesUsed = fields[7].toInt();
+    m_data.dop.hdop = fields[8].toDouble();
+    if (fields.size() > 9 && !fields[9].isEmpty())
+        m_data.position.altitude = fields[9].toDouble();
+    if (fields.size() > 10 && !fields[10].isEmpty())
+        m_data.position.geoidSeparation = fields[10].toDouble();
+
+    m_data.position.valid = m_data.valid;
+    emit fixUpdated(m_data);
+    emit positionUpdated(m_data.position);
+}
+
+void NmeaParser::parseDTM(const QVector<QByteArray> &fields)
+{
+    Q_UNUSED(fields);
+}
+
+void NmeaParser::parseGLL(const QVector<QByteArray> &fields)
+{
+    if (fields.size() < 7) return;
+    // $xxGLL,<Lat>,<N/S>,<Long>,<E/W>,<Timestamp>,<Status>
+    if (!fields[1].isEmpty()) {
+        m_data.position.latitude = fields[1].toDouble();
+        m_data.position.latDirection = fields[2].isEmpty() ? 'N' : fields[2][0];
+    }
+    if (!fields[3].isEmpty()) {
+        m_data.position.longitude = fields[3].toDouble();
+        m_data.position.lonDirection = fields[4].isEmpty() ? 'E' : fields[4][0];
+    }
+    QByteArray ts = fields[5];
+    if (ts.size() >= 6) {
+        int h = ts.mid(0, 2).toInt();
+        int m = ts.mid(2, 2).toInt();
+        int s = ts.mid(4, 2).toInt();
+        int ms = (ts.size() > 7) ? ts.mid(7).leftJustified(3, '0').left(3).toInt() : 0;
+        m_data.utcDateTime.setTime(QTime(h, m, s, ms));
+    }
+    if (fields.size() > 6 && fields[6] == "A") {
+        m_data.valid = true;
+        m_data.position.valid = true;
+    }
+}
+
 // =====================================================
 // PSTM proprietary message parser
 // =====================================================
@@ -337,6 +438,35 @@ void NmeaParser::parsePSTM(const QByteArray &sentence)
         parsePSTMAGPSSTATUS(fields);
     } else if (cmd == "$PSTMGETUCODEOK") {
         parsePSTMGETUCODEOK(fields);
+    } else if (cmd == "$PSTMSTAGPS8PASSRTN") {
+        if (fields.size() >= 2)
+            emit agpsStatusReceived(sentence);
+    } else if (cmd == "$PSTMDRMMFBKF") {
+        emit pstmMessageReceived(sentence);
+    } else if (cmd == "$PSTMDRCALCTLTOK" || cmd == "$PSTMDRCALCTLTERROR" ||
+               cmd == "$PSTMDRNVMSAVEOK" || cmd == "$PSTMDRNVMSAVEERROR") {
+        emit pstmMessageReceived(sentence);
+    } else if (cmd == "$PSTMPOLSTARTED" || cmd == "$PSTMPOLSUSPENDED" ||
+               cmd == "$PSTMPOLONOFFERROR" ||
+               cmd == "$PSTMSTAGPSINVALIDATEOK" || cmd == "$PSTMSTAGPSINVALIDATEERROR" ||
+               cmd == "$PSTMSTAGPSSETCONSTMASKOK" || cmd == "$PSTMSTAGPSSETCONSTMASKERROR") {
+        emit agpsStatusReceived(sentence);
+    } else if (cmd == "$PSTMLOWPOWERERROR") {
+        emit lowPowerReceived(sentence);
+    } else if (cmd == "$PSTMFORCESTANDBYOK" || cmd == "$PSTMFORCESTANDBYERROR") {
+        emit pstmMessageReceived(sentence);
+    } else if (cmd == "$PSTMPPSDATA") {
+        emit pstmMessageReceived(sentence);
+    } else if (cmd == "$PSTMTRAIMSTATUS" || cmd == "$PSTMTRAIMUSED" ||
+               cmd == "$PSTMTRAIMRES" || cmd == "$PSTMTRAIMREMOVED") {
+        emit pstmMessageReceived(sentence);
+    } else if (cmd == "$PSTMDIFF" || cmd == "$PSTMPRES" || cmd == "$PSTMVRES" ||
+               cmd == "$PSTMRF" || cmd == "$PSTMSAT" || cmd == "$PSTMSBAS" ||
+               cmd == "$PSTMTIM" || cmd == "$PSTMTG" || cmd == "$PSTMTS" ||
+               cmd == "$PSTMKFCOV" || cmd == "$PSTMNOTCHSTATUS" || cmd == "$PSTMCPU" ||
+               cmd == "$PSTMPOSNHOLD" || cmd == "$PSTMGALILEOGGTO" ||
+               cmd == "$PSTMNOISE" || cmd == "$PSTMPA" || cmd == "$PSTMTESTRF") {
+        emit pstmMessageReceived(sentence);
     }
 }
 

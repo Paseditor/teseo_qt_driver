@@ -118,6 +118,49 @@ void TestNmeaParser::parseGST()
     QVERIFY(qAbs(acc.latErr - 3.2) < 0.01);
 }
 
+void TestNmeaParser::parseGBS()
+{
+    Teseo::NmeaParser parser;
+    QSignalSpy spy(&parser, &Teseo::NmeaParser::accuracyUpdated);
+
+    QByteArray sentence = makeValidSentence("GNGBS,211120.000,7.6,9.6,10.8,,,,,,");
+    parser.processData(sentence);
+
+    QCOMPARE(spy.count(), 1);
+    Teseo::Accuracy acc = spy.at(0).at(0).value<Teseo::Accuracy>();
+    QVERIFY(qAbs(acc.latErr - 7.6) < 0.01);
+    QVERIFY(qAbs(acc.lonErr - 9.6) < 0.01);
+    QVERIFY(qAbs(acc.altErr - 10.8) < 0.01);
+}
+
+void TestNmeaParser::parseGNS()
+{
+    Teseo::NmeaParser parser;
+    QSignalSpy spy(&parser, &Teseo::NmeaParser::fixUpdated);
+
+    QByteArray sentence = makeValidSentence("GNGNS,091233.000,4055.04824,N,01416.55600,E,AAANN,19,0.7,0078.1,42.9,,");
+    parser.processData(sentence);
+
+    QCOMPARE(spy.count(), 1);
+    Teseo::GnssData data = spy.at(0).at(0).value<Teseo::GnssData>();
+    QCOMPARE(data.satellitesUsed, 19);
+    QVERIFY(qAbs(data.dop.hdop - 0.7) < 0.01);
+    QVERIFY(qAbs(data.position.altitude - 78.1) < 0.01);
+    QVERIFY(data.valid);
+    QCOMPARE(data.fixQuality, Teseo::FixQuality::GPS);
+}
+
+void TestNmeaParser::parseGLL()
+{
+    Teseo::NmeaParser parser;
+    QByteArray sentence = makeValidSentence("GPGLL,4055.04673,N,01416.54941,E,110505.000,A,A");
+    parser.processData(sentence);
+
+    Teseo::GnssData data = parser.currentData();
+    QVERIFY(data.valid);
+    QVERIFY(qAbs(data.position.latitude - 4055.04673) < 0.01);
+}
+
 void TestNmeaParser::parseMultiple()
 {
     Teseo::NmeaParser parser;

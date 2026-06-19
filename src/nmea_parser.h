@@ -59,6 +59,10 @@ private:
     void parseVTG(const QVector<QByteArray> &fields);
     void parseZDA(const QVector<QByteArray> &fields);
     void parseGST(const QVector<QByteArray> &fields);
+    void parseGBS(const QVector<QByteArray> &fields);
+    void parseGNS(const QVector<QByteArray> &fields);
+    void parseDTM(const QVector<QByteArray> &fields);
+    void parseGLL(const QVector<QByteArray> &fields);
     void parsePSTM(const QByteArray &sentence);
 
     void parsePSTMVER(const QVector<QByteArray> &fields);

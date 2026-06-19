@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
     // driver.coldStart();
     // driver.setConstellationMask(1);  // GPS only
     // driver.setConstellationMask(3);  // GPS + GLONASS
-    // driver.enableSBAS(15);  // Auto SBAS
+    // driver.enableSbasAuto();  // Auto SBAS
 
     return app.exec();
 }

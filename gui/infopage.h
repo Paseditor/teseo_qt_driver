@@ -7,6 +7,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <QTableWidget>
+#include <QTextEdit>
 
 #include "teseo_driver.h"
 
@@ -27,7 +28,14 @@ private:
     QLabel *m_speedLbl, *m_courseLbl, *m_fixLbl, *m_satsLbl;
     QLabel *m_hdopLbl, *m_pdopLbl, *m_vdopLbl, *m_ehpeLbl;
     QLabel *m_timeLbl, *m_dateLbl;
+    QLabel *m_rtcTimeLbl, *m_rtcDateLbl, *m_rtcStatusLbl;
+    QLabel *m_swVerLbl;
+    QLabel *m_ppsOnLbl, *m_ppsValidLbl, *m_ppsModeLbl;
+    QLabel *m_traimLbl, *m_traimErrLbl;
+    QLabel *m_standbyLbl;
+    QLabel *m_uniqueCodeLbl;
     QTableWidget *m_satTable;
+    QTextEdit *m_eventLog;
 };
 
 #endif

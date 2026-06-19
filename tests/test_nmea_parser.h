@@ -18,6 +18,9 @@ private slots:
     void parseVTG();
     void parseZDA();
     void parseGST();
+    void parseGBS();
+    void parseGNS();
+    void parseGLL();
     void parseMultiple();
     void invalidChecksumIgnored();
     void partialDataBuffered();

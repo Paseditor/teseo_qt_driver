@@ -29,6 +29,9 @@ private:
     void createStartGroup(QVBoxLayout *parent);
     void createControlGroup(QVBoxLayout *parent);
     void createMiscGroup(QVBoxLayout *parent);
+    void createStatusGroup(QVBoxLayout *parent);
+    void createInvalidationGroup(QVBoxLayout *parent);
+    void createAdvancedGroup(QVBoxLayout *parent);
     void createCustomGroup(QVBoxLayout *parent);
 
     Teseo::TeseoDriver *m_driver;

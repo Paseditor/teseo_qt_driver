@@ -1,0 +1,25 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+<qresource prefix="/">
+    <file>qml/qmldir</file>
+    <file>qml/Theme.qml</file>
+    <file>qml/SectionLabel.qml</file>
+    <file>qml/ValueDisplay.qml</file>
+    <file>qml/PrimaryButton.qml</file>
+    <file>qml/GhostButton.qml</file>
+    <file>qml/DangerButton.qml</file>
+    <file>qml/StyledTextField.qml</file>
+    <file>qml/StyledSpinBox.qml</file>
+    <file>qml/StyledComboBox.qml</file>
+    <file>qml/StyledCheckBox.qml</file>
+    <file>qml/LogTextArea.qml</file>
+    <file>qml/main.qml</file>
+    <file>qml/ConnectionPage.qml</file>
+    <file>qml/InfoPage.qml</file>
+    <file>qml/CommandPage.qml</file>
+    <file>qml/ConfigPage.qml</file>
+    <file>qml/AGNSSPage.qml</file>
+    <file>qml/DeadReckoningPage.qml</file>
+    <file>qml/LogPage.qml</file>
+</qresource>
+</RCC>

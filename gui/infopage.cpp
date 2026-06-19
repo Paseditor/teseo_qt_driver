@@ -7,6 +7,7 @@
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QHeaderView>
+#include <QDateTime>
 
 InfoPage::InfoPage(Teseo::TeseoDriver *driver, QWidget *parent)
     : QWidget(parent), m_driver(driver)
@@ -19,29 +20,27 @@ InfoPage::InfoPage(Teseo::TeseoDriver *driver, QWidget *parent)
     auto *leftLayout = new QVBoxLayout;
     leftLayout->setSpacing(10);
 
+    auto makeRow = [](QGridLayout *grid, int &r, const QString &label, QLabel *&val) {
+        auto *lbl = new QLabel(label);
+        lbl->setStyleSheet("color: #94a3b8; font-size: 11px;");
+        val = new QLabel("---");
+        val->setStyleSheet("color: #e2e8f0; font-size: 12px; font-weight: 500;");
+        grid->addWidget(lbl, r, 0);
+        grid->addWidget(val, r++, 1);
+    };
+
     // Position card
     auto *posGroup = new QGroupBox("Position");
     auto *posGrid = new QGridLayout;
     posGrid->setSpacing(6);
     int r = 0;
-
-    auto makeRow = [&](const QString &label, QLabel *&val) {
-        auto *lbl = new QLabel(label);
-        lbl->setStyleSheet("color: #94a3b8; font-size: 11px;");
-        val = new QLabel("---");
-        val->setStyleSheet("color: #e2e8f0; font-size: 12px; font-weight: 500;");
-        posGrid->addWidget(lbl, r, 0);
-        posGrid->addWidget(val, r++, 1);
-    };
-
-    makeRow("Latitude:", m_latLbl);
-    makeRow("Longitude:", m_lonLbl);
-    makeRow("Altitude:", m_altLbl);
-    makeRow("Speed:", m_speedLbl);
-    makeRow("Course:", m_courseLbl);
-    makeRow("Fix Quality:", m_fixLbl);
-    makeRow("Sats Used:", m_satsLbl);
-
+    makeRow(posGrid, r, "Latitude:", m_latLbl);
+    makeRow(posGrid, r, "Longitude:", m_lonLbl);
+    makeRow(posGrid, r, "Altitude:", m_altLbl);
+    makeRow(posGrid, r, "Speed:", m_speedLbl);
+    makeRow(posGrid, r, "Course:", m_courseLbl);
+    makeRow(posGrid, r, "Fix Quality:", m_fixLbl);
+    makeRow(posGrid, r, "Sats Used:", m_satsLbl);
     posGroup->setLayout(posGrid);
     leftLayout->addWidget(posGroup);
 
@@ -50,28 +49,53 @@ InfoPage::InfoPage(Teseo::TeseoDriver *driver, QWidget *parent)
     auto *dopGrid = new QGridLayout;
     dopGrid->setSpacing(6);
     r = 0;
-
-    auto makeDopRow = [&](const QString &label, QLabel *&val) {
-        auto *lbl = new QLabel(label);
-        lbl->setStyleSheet("color: #94a3b8; font-size: 11px;");
-        val = new QLabel("---");
-        val->setStyleSheet("color: #e2e8f0; font-size: 12px; font-weight: 500;");
-        dopGrid->addWidget(lbl, r, 0);
-        dopGrid->addWidget(val, r++, 1);
-    };
-
-    makeDopRow("HDOP:", m_hdopLbl);
-    makeDopRow("PDOP:", m_pdopLbl);
-    makeDopRow("VDOP:", m_vdopLbl);
-    makeDopRow("EHPE:", m_ehpeLbl);
-    makeDopRow("UTC Time:", m_timeLbl);
-    makeDopRow("UTC Date:", m_dateLbl);
-
+    makeRow(dopGrid, r, "HDOP:", m_hdopLbl);
+    makeRow(dopGrid, r, "PDOP:", m_pdopLbl);
+    makeRow(dopGrid, r, "VDOP:", m_vdopLbl);
+    makeRow(dopGrid, r, "EHPE:", m_ehpeLbl);
+    makeRow(dopGrid, r, "UTC Time:", m_timeLbl);
+    makeRow(dopGrid, r, "UTC Date:", m_dateLbl);
     dopGroup->setLayout(dopGrid);
     leftLayout->addWidget(dopGroup);
+
+    // RTC card
+    auto *rtcGroup = new QGroupBox("RTC Time");
+    auto *rtcGrid = new QGridLayout;
+    rtcGrid->setSpacing(6);
+    r = 0;
+    makeRow(rtcGrid, r, "RTC Time:", m_rtcTimeLbl);
+    makeRow(rtcGrid, r, "RTC Date:", m_rtcDateLbl);
+    makeRow(rtcGrid, r, "RTC Status:", m_rtcStatusLbl);
+    rtcGroup->setLayout(rtcGrid);
+    leftLayout->addWidget(rtcGroup);
+
+    // Version / Status card
+    auto *verGroup = new QGroupBox("Device Info");
+    auto *verGrid = new QGridLayout;
+    verGrid->setSpacing(6);
+    r = 0;
+    makeRow(verGrid, r, "SW Version:", m_swVerLbl);
+    makeRow(verGrid, r, "Unique Code:", m_uniqueCodeLbl);
+    makeRow(verGrid, r, "Standby:", m_standbyLbl);
+    verGroup->setLayout(verGrid);
+    leftLayout->addWidget(verGroup);
+
+    // PPS / TRAIM card
+    auto *ppsGroup = new QGroupBox("PPS / TRAIM");
+    auto *ppsGrid = new QGridLayout;
+    ppsGrid->setSpacing(6);
+    r = 0;
+    makeRow(ppsGrid, r, "PPS On:", m_ppsOnLbl);
+    makeRow(ppsGrid, r, "PPS Valid:", m_ppsValidLbl);
+    makeRow(ppsGrid, r, "PPS Mode:", m_ppsModeLbl);
+    makeRow(ppsGrid, r, "TRAIM:", m_traimLbl);
+    makeRow(ppsGrid, r, "TRAIM Error:", m_traimErrLbl);
+    ppsGroup->setLayout(ppsGrid);
+    leftLayout->addWidget(ppsGroup);
+
     leftLayout->addStretch();
 
-    // Right panel - satellites
+    // Middle panel - satellites
     auto *satGroup = new QGroupBox("Satellites in View");
     auto *satLayout = new QVBoxLayout;
     satLayout->setContentsMargins(8, 12, 8, 8);
@@ -87,8 +111,23 @@ InfoPage::InfoPage(Teseo::TeseoDriver *driver, QWidget *parent)
     satLayout->addWidget(m_satTable);
     satGroup->setLayout(satLayout);
 
-    mainLayout->addLayout(leftLayout, 1);
-    mainLayout->addWidget(satGroup, 2);
+    // Right panel - event log
+    auto *evtGroup = new QGroupBox("Events");
+    auto *evtLayout = new QVBoxLayout;
+    evtLayout->setContentsMargins(8, 12, 8, 8);
+    m_eventLog = new QTextEdit;
+    m_eventLog->setReadOnly(true);
+    m_eventLog->setFontFamily("Cascadia Code");
+    m_eventLog->setFontPointSize(9);
+    m_eventLog->setPlaceholderText("Signal events...");
+    evtLayout->addWidget(m_eventLog);
+    evtGroup->setLayout(evtLayout);
+
+    mainLayout->addLayout(leftLayout, 2);
+    mainLayout->addWidget(satGroup, 3);
+    mainLayout->addWidget(evtGroup, 2);
+
+    // === Signal connections ===
 
     connect(m_driver, &Teseo::TeseoDriver::fixUpdated,
             this, &InfoPage::onFixUpdated);
@@ -96,6 +135,100 @@ InfoPage::InfoPage(Teseo::TeseoDriver *driver, QWidget *parent)
             this, &InfoPage::onSatellitesUpdated);
     connect(m_driver, &Teseo::TeseoDriver::accuracyUpdated,
             this, &InfoPage::onAccuracyUpdated);
+
+    connect(m_driver, &Teseo::TeseoDriver::rtcTimeReceived,
+            this, [this](const Teseo::RTCData &rtc) {
+        m_rtcTimeLbl->setText(rtc.time.toString("HH:mm:ss.zzz"));
+        m_rtcDateLbl->setText(rtc.date.toString("dd.MM.yyyy"));
+        QString status;
+        switch (rtc.status) {
+        case 0: status = "Invalid"; break;
+        case 1: status = "Stored"; break;
+        case 2: status = "Approximate"; break;
+        default: status = QString::number(rtc.status);
+        }
+        m_rtcStatusLbl->setText(status);
+        m_eventLog->append(QString("<span style='color:#38bdf8'>%1 RTC: %2 %3</span>")
+            .arg(QDateTime::currentDateTime().toString("HH:mm:ss"),
+                 rtc.time.toString(), rtc.date.toString()));
+    });
+
+    connect(m_driver, &Teseo::TeseoDriver::softwareVersionReceived,
+            this, [this](const Teseo::SoftwareVersion &ver) {
+        QString v;
+        if (!ver.binaryImage.isEmpty()) v = ver.binaryImage;
+        else if (!ver.gnssLib.isEmpty()) v = ver.gnssLib;
+        else if (!ver.gpsApp.isEmpty()) v = ver.gpsApp;
+        m_swVerLbl->setText(v);
+        m_eventLog->append(QString("<span style='color:#a78bfa'>%1 VER: %2</span>")
+            .arg(QDateTime::currentDateTime().toString("HH:mm:ss"), v));
+    });
+
+    connect(m_driver, &Teseo::TeseoDriver::ppsStatusReceived,
+            this, [this](const Teseo::PPSStatus &pps) {
+        m_ppsOnLbl->setText(pps.on ? "ON" : "OFF");
+        m_ppsValidLbl->setText(pps.valid ? "Valid" : "Invalid");
+        m_ppsValidLbl->setStyleSheet(pps.valid ?
+            "color: #4ade80; font-size: 12px; font-weight: 500;" :
+            "color: #f87171; font-size: 12px; font-weight: 500;");
+        QString mode;
+        switch (pps.outMode) {
+        case 0: mode = "Always"; break;
+        case 1: mode = "Even"; break;
+        case 2: mode = "Odd"; break;
+        default: mode = QString::number(pps.outMode);
+        }
+        m_ppsModeLbl->setText(mode);
+    });
+
+    connect(m_driver, &Teseo::TeseoDriver::traimStatusReceived,
+            this, [this](const Teseo::TRAIMStatus &traim) {
+        QString sol;
+        switch (traim.solution) {
+        case 0: sol = "Under Alarm"; break;
+        case 1: sol = "Over Alarm"; break;
+        default: sol = "Unknown";
+        }
+        m_traimLbl->setText(sol + (traim.enabled ? " (ON)" : " (OFF)"));
+        m_traimErrLbl->setText(QString::number(traim.averageError, 'f', 1) + " ns");
+    });
+
+    connect(m_driver, &Teseo::TeseoDriver::standbyStatusReceived,
+            this, [this](bool enabled) {
+        m_standbyLbl->setText(enabled ? "Standby Allowed" : "Active Periodic");
+    });
+
+    connect(m_driver, &Teseo::TeseoDriver::uniqueCodeReceived,
+            this, [this](const QByteArray &code) {
+        m_uniqueCodeLbl->setText(QString::fromLatin1(code));
+        m_eventLog->append(QString("<span style='color:#fbbf24'>%1 UID: %2</span>")
+            .arg(QDateTime::currentDateTime().toString("HH:mm:ss"),
+                 QString::fromLatin1(code)));
+    });
+
+    connect(m_driver, &Teseo::TeseoDriver::lowPowerReceived,
+            this, [this](const QByteArray &data) {
+        m_eventLog->append(QString("<span style='color:#4ade80'>%1 LP: %2</span>")
+            .arg(QDateTime::currentDateTime().toString("HH:mm:ss"),
+                 QString::fromLatin1(data)));
+    });
+
+    connect(m_driver, &Teseo::TeseoDriver::agpsStatusReceived,
+            this, [this](const QByteArray &data) {
+        m_eventLog->append(QString("<span style='color:#fb923c'>%1 AGPS: %2</span>")
+            .arg(QDateTime::currentDateTime().toString("HH:mm:ss"),
+                 QString::fromLatin1(data)));
+    });
+
+    connect(m_driver, &Teseo::TeseoDriver::pstmMessageReceived,
+            this, [this](const QByteArray &msg) {
+        if (m_eventLog->document()->blockCount() > 500) {
+            QTextCursor c = m_eventLog->textCursor();
+            c.movePosition(QTextCursor::Start);
+            c.movePosition(QTextCursor::Down, QTextCursor::KeepAnchor, 100);
+            c.removeSelectedText();
+        }
+    });
 }
 
 void InfoPage::onFixUpdated(const Teseo::GnssData &data)
